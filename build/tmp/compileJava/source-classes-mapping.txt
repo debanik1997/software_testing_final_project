@@ -1,6 +1,44 @@
-SudokuSolver.java
- SudokuSolver
- SudokuSolver$Cell
-SudokuSolverFixed.java
- SudokuSolverFixed
- SudokuSolverFixed$Cell
+Checkers/src/ui/NetworkWindow.java
+ ui.NetworkWindow
+ ui.NetworkWindow$ButtonListener
+Checkers/src/ui/Main.java
+ ui.Main
+Checkers/src/model/Player.java
+ model.Player
+Checkers/src/network/ConnectionHandler.java
+ network.ConnectionHandler
+Checkers/src/model/Game.java
+ model.Game
+Checkers/src/model/Board.java
+ model.Board
+Checkers/src/ui/CheckerBoard.java
+ ui.CheckerBoard
+ ui.CheckerBoard$1
+ ui.CheckerBoard$ClickListener
+Checkers/src/logic/MoveLogic.java
+ logic.MoveLogic
+Checkers/src/model/Move.java
+ model.Move
+Checkers/src/logic/MoveGenerator.java
+ logic.MoveGenerator
+Checkers/src/network/Command.java
+ network.Command
+Checkers/src/network/ConnectionListener.java
+ network.ConnectionListener
+Checkers/src/model/NetworkPlayer.java
+ model.NetworkPlayer
+Checkers/src/model/HumanPlayer.java
+ model.HumanPlayer
+Checkers/src/ui/OptionPanel.java
+ ui.OptionPanel
+ ui.OptionPanel$OptionListener
+Checkers/src/ui/CheckersWindow.java
+ ui.CheckersWindow
+Checkers/src/model/ComputerPlayer.java
+ model.ComputerPlayer
+Checkers/src/network/CheckersNetworkHandler.java
+ network.CheckersNetworkHandler
+Checkers/src/network/CheckersConnection.java
+ network.CheckersConnection
+Checkers/src/network/Session.java
+ network.Session

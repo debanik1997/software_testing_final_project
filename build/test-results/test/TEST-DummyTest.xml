@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="DummyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-22T19:38:19" hostname="Debaniks-MacBook-Air.local" time="0.131">
+  <properties/>
+  <testcase name="testDummy()" classname="DummyTest" time="0.131"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
