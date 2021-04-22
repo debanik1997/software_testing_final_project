@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StringUtilsFixed.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">task1_java</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">StringUtilsFixed.java</span></div><h1>StringUtilsFixed.java</h1><pre class="source lang-java linenums">/**
+ * @author Debanik Purkayasthas
+ *
+ */
+<span class="nc" id="L5">public class StringUtilsFixed {</span>
+
+    /** This method compresses a string using the counts of repeated consecutive characters. For instance,
+     * aabcccccaaa would be compressed as a2blc5a3. If the length of the compressed string is not less than the input
+     * string, the input string value would be returned with no compression. An example for the latter
+     * case would be &quot;ab&quot; (i.e., compress(&quot;ab&quot;) returns &quot;ab&quot; not &quot;a1b1&quot;).
+     *
+     * @param str the input string to be compressed
+     * @return compressed string
+     * @throws NullPointerException if str is null
+     */
+    public String compress(String str) {
+<span class="nc" id="L17">        StringBuilder compressed= new StringBuilder();</span>
+<span class="nc" id="L18">        int countConsecutive = 0;</span>
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        for (int i = 0; i &lt; str.length(); i++) {</span>
+<span class="nc" id="L20">            countConsecutive++;</span>
+<span class="nc bnc" id="L21" title="All 4 branches missed.">            if (i != str.length() - 1 &amp;&amp; str.charAt(i) != str.charAt(i + 1)) {</span>
+<span class="nc" id="L22">                compressed.append(str.charAt(i));</span>
+<span class="nc" id="L23">                compressed.append(countConsecutive);</span>
+<span class="nc" id="L24">                countConsecutive = 0;</span>
+            }
+<span class="nc bnc" id="L26" title="All 2 branches missed.">            if (i == str.length() - 1) {</span>
+<span class="nc" id="L27">                compressed.append(str.charAt(i));</span>
+<span class="nc" id="L28">                compressed.append(countConsecutive);</span>
+            }
+        }
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        return compressed.length() &lt; str.length() ? compressed.toString() : str;</span>
+    }
+
+    /** This method checks if two strings are permutations of each other or not. A permutation is a
+     * rearrangement of characters. For instance, &quot;cat&quot; and &quot;act&quot; are permutations of each other while
+     * &quot;abcdd&quot; and &quot;bddae&quot; are not.
+     *
+     * @param str1 the first input string
+     * @param str2 the second input string
+     * @return true if the two strings are permutations of each other, false otherwise
+     * @throws NullPointerException if str1 or str2 is null
+     */
+    public boolean isPermutation(String str1, String str2) {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (str1.length() != str2.length()) {</span>
+<span class="nc" id="L45">            return false;</span>
+        }
+<span class="nc" id="L47">        int[] letters = new int[256];</span>
+<span class="nc" id="L48">        char[] s_array = str1.toCharArray();</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        for (char c : s_array) {</span>
+<span class="nc" id="L50">            letters[c]++;</span>
+        }
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (int i = 0; i &lt; str2.length(); i++) {</span>
+<span class="nc" id="L53">            int c = (int) str2.charAt(i);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (letters[c] &lt;= 0) {</span>
+<span class="nc" id="L55">                return false;</span>
+            }
+<span class="nc" id="L57">            letters[c]--;</span>
+        }
+<span class="nc" id="L59">        return true;</span>
+    }
+
+    /** This method checks if a string is a permutation of a palindrome or not. A permutation is a
+     * rearrangement of characters. A palindrome string is a string that reads the
+     * same forward and backwards. For example, &quot;F&quot;, &quot;ABA&quot;, &quot;abdgjgdba&quot;, &quot;bahhab&quot; are all palindormes.
+     * Thus, for instance, the method returns true for &quot;BAA&quot; since it is a permutation of
+     * &quot;ABA&quot; which is a palindrome.
+     *
+     * @param str the input string
+     * @return true if str is a permutation of a palindrome, false otherwise.
+     * @throws NullPointerException is str is null
+     */
+    public boolean isPermutationOfPalindrome(String str) {
+<span class="nc" id="L73">        int countOdd = 0;</span>
+<span class="nc" id="L74">        int[] table = new int[256];</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        for (char c : str.toCharArray()) {</span>
+<span class="nc" id="L76">            int x = (int) c;</span>
+<span class="nc" id="L77">            table[x]++;</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (table[x] % 2 == 1) {</span>
+<span class="nc" id="L79">                countOdd++;</span>
+            } else {
+<span class="nc" id="L81">                countOdd--;</span>
+            }
+
+        }
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        return countOdd &lt;= 1;</span>
+    }
+
+    /** This method converts a string to an integer similar to what atoi
+     * does in C or what Integer.parseInt() in Java does. If the string exceeds
+     * Integer.MAX_VALUE, Integer.MAX_VALUE is returned. If the string falls below
+     * Integer.MIN_VALUE, Integer.MIN_VALUE is returned. If the string is empty, it
+     * returns zero.
+     *
+     * @param str the input string
+     * @return the integer value represented by str
+     * @throws NullPointerException is str is null
+     * @throws NumberFormatException if str contains any non-digit characters
+     */
+    public int stringToInteger(String str) {
+<span class="nc" id="L100">        int index = 0, sign = 1, total = 0;</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (str.length() == 0) throw new NumberFormatException();</span>
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (int i = 0; i &lt; str.length(); i++) {</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">            if ((str.charAt(i) &lt; '0' || str.charAt(i) &gt; '9')) {</span>
+<span class="nc bnc" id="L106" title="All 6 branches missed.">                if (i == 0 &amp;&amp; (str.charAt(i) == '-' ||  str.charAt(i) == '+'))</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                    if (str.length() &gt; 1)</span>
+<span class="nc" id="L108">                        continue;</span>
+<span class="nc" id="L109">                throw new NumberFormatException();</span>
+            }
+
+        }
+
+<span class="nc bnc" id="L114" title="All 4 branches missed.">        if (str.charAt(index) == '+' || str.charAt(index) == '-') {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            sign = str.charAt(index) == '+' ? 1 : -1;</span>
+<span class="nc" id="L116">            index++;</span>
+        }
+
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        while (index &lt; str.length()) {</span>
+<span class="nc" id="L120">            int digit = str.charAt(index) - '0';</span>
+
+<span class="nc bnc" id="L122" title="All 4 branches missed.">            if (total &gt; (Integer.MAX_VALUE / 10) || total &lt; (Integer.MIN_VALUE / 10)) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;</span>
+            }
+<span class="nc" id="L125">            total = 10 * total + digit;</span>
+<span class="nc" id="L126">            index++;</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">        return total * sign;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
