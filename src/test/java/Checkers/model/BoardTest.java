@@ -201,7 +201,7 @@ public class BoardTest {
 
     @Test
     void testToPointCorrectlyConvertsBlackTileIndexToPointIndexInRangeIndex31() {
-        assertEquals(new Point(7, 7), Board.toPoint(31));
+        assertEquals(new Point(6, 7), Board.toPoint(31));
     }
 
     @Test
