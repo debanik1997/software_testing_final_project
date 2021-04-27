@@ -55,7 +55,7 @@ public class BoardTest {
 
     @Test
     void testFindAllWhitePiecesInitialBoardConfiguration() {
-        int[][] initialBlackPieceLocations = {
+        int[][] initialWhitePieceLocations = {
                 {0, 5},
                 {2, 5},
                 {4, 5},
@@ -72,14 +72,14 @@ public class BoardTest {
 
         List<Point> list = board.find(Board.WHITE_CHECKER);
         for (int i = 0; i < list.size(); i++) {
-            assertEquals(initialBlackPieceLocations[i][0], list.get(i).x);
-            assertEquals(initialBlackPieceLocations[i][1], list.get(i).y);
+            assertEquals(initialWhitePieceLocations[i][0], list.get(i).x);
+            assertEquals(initialWhitePieceLocations[i][1], list.get(i).y);
         }
     }
 
     @Test
     void testFindAllEmptyPiecesInitialBoardConfiguration() {
-        int[][] initialBlackPieceLocations = {
+        int[][] initialEmptyLocations = {
                 {0, 3},
                 {2, 3},
                 {4, 3},
@@ -92,8 +92,8 @@ public class BoardTest {
 
         List<Point> list = board.find(Board.EMPTY);
         for (int i = 0; i < list.size(); i++) {
-            assertEquals(initialBlackPieceLocations[i][0], list.get(i).x);
-            assertEquals(initialBlackPieceLocations[i][1], list.get(i).y);
+            assertEquals(initialEmptyLocations[i][0], list.get(i).x);
+            assertEquals(initialEmptyLocations[i][1], list.get(i).y);
         }
     }
 
@@ -102,4 +102,131 @@ public class BoardTest {
         List<Point> list = board.find(Board.INVALID);
         assertEquals(0, list.size());
     }
+
+    @Test
+    void testFindPiecesWithRandomIDInitialBoardConfiguration() {
+        List<Point> list = board.find(999);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexInRangeUsingSetWithIndex() {
+        board.set(15, Board.WHITE_KING);
+        assertEquals(Board.WHITE_KING, board.get(15));
+    }
+
+    @Test
+    void testSetSquareToIDIndexInRangeMinValUsingSetWithIndex() {
+        board.set(0, Board.WHITE_KING);
+        assertEquals(Board.WHITE_KING, board.get(0));
+    }
+
+    @Test
+    void testSetSquareToIDIndexInRangeMaxValUsingSetWithIndex() {
+        board.set(31, Board.WHITE_KING);
+        assertEquals(Board.WHITE_KING, board.get(31));
+    }
+
+    @Test
+    void testSetSquareToIDIndexBelowRangeUsingSetWithIndex() {
+        board.set(-1, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexAboveRangeUsingSetWithIndex() {
+        board.set(32, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexIntegerMinValUsingSetWithIndex() {
+        board.set(Integer.MIN_VALUE, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexIntegerMaxValUsingSetWithIndex() {
+        board.set(Integer.MAX_VALUE, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexInRangeUsingSetWithXAndY() {
+        board.set(2, 3, Board.WHITE_KING);
+        assertEquals(Board.WHITE_KING, board.get(2, 3));
+    }
+
+    @Test
+    void testSetSquareToIDIndexBelowRangeUsingSetWithXAndY() {
+        board.set(-1, -1, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexAboveRangeUsingSetWithXAndY() {
+        board.set(8, 8, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexIntegerMinValUsingSetWithXAndY() {
+        board.set(Integer.MIN_VALUE, Integer.MIN_VALUE, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testSetSquareToIDIndexIntegerMaxValUsingSetWithXAndY() {
+        board.set(Integer.MAX_VALUE, Integer.MAX_VALUE, Board.WHITE_KING);
+        List<Point> list = board.find(Board.WHITE_KING);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    void testToPointCorrectlyConvertsBlackTileIndexToPointIndexInRange() {
+        assertEquals(new Point(3, 0), Board.toPoint(1));
+    }
+
+    @Test
+    void testToPointCorrectlyConvertsBlackTileIndexToPointIndexInRangeIndex0() {
+        assertEquals(new Point(1, 0), Board.toPoint(0));
+    }
+
+    @Test
+    void testToPointCorrectlyConvertsBlackTileIndexToPointIndexInRangeIndex31() {
+        assertEquals(new Point(7, 7), Board.toPoint(31));
+    }
+
+    @Test
+    void testToPointConvertsToInvalidPointBlackTileIndexToPointIndexLessThanRange() {
+        assertEquals(new Point(-1, -1), Board.toPoint(-1));
+    }
+
+    @Test
+    void testToPointConvertsToInvalidPointBlackTileIndexToPointIndexGreaterThanRange() {
+        assertEquals(new Point(-1, -1), Board.toPoint(32));
+    }
+
+    @Test
+    void testToIndexCorrectlyConvertsXAndYToBlackTileIndexXAndYInRange() {
+        assertEquals(1, Board.toIndex(new Point(3, 0)));
+    }
+
+    @Test
+    void testToIndexReturnsNegative1ForInvalidPoint() {
+        assertEquals(-1, Board.toIndex(new Point(-1, -1)));
+    }
+
+    @Test
+    void testToIndexReturnsNegative1ForNullPoint() {
+        assertEquals(-1, Board.toIndex(null));
+    }
+
 }
