@@ -35,6 +35,18 @@ public class GameTest {
     }
 
     @Test
+    public void testGameAlternateConstructor() {
+        Game cur = new Game(game.getBoard(), true, -1);
+        assertEquals(initialState, cur.getGameState());
+    }
+
+    @Test
+    public void testGameAltConstructorBoardNull() {
+        Game cur = new Game(null, true, -1);
+        assertEquals(initialState, cur.getGameState());
+    }
+
+    @Test
     public void testRestartInProg() {
         String temp = "666666666666000000004444444444441-1";
         Game inProg = new Game(temp);
@@ -72,17 +84,61 @@ public class GameTest {
         assertFalse(game.move(0,0));
     }
 
-//    @Test
-//    public void testMoveKingWhite() {
-//
-//    }
-//
-//    @Test
-//    public void testMoveKingBlack() {
-//        Game cur = new Game("006060060460400040000000000446041-1");
-//        assertTrue(cur.move(25,29));
-//    }
+    @Test
+    public void testMoveNegativeStart() {
+        assertFalse(game.move(-1,0));
+    }
 
+    @Test
+    public void testMoveNegativeEnd() {
+        assertFalse(game.move(0,-5));
+    }
+
+
+    @Test
+    public void testMoveKingBlack() {
+        Game cur = new Game("666606000040400000004060004440001-1");
+        assertTrue(cur.move(22,31));
+    }
+
+    @Test
+    public void testMoveKingWhite() {
+        Game cur = new Game("006666060406604000006400004004440-1");
+        assertTrue(cur.move(9,0));
+    }
+
+    @Test
+    public void testMoveAltersBoard() {
+        game.move(9,14);
+        assertEquals("666666666066006000004444444444440-1", game.getGameState());
+    }
+
+    @Test
+    public void testMoveWithSkipValid() {
+        Game cur = new Game("660660006060406004604000040440041-1");
+        assertTrue(cur.move(14,21));
+    }
+
+    @Test
+    public void testMoveKingTakePiece() {
+        Game cur = new Game("500606060006006000000060400440741-1");
+        assertTrue(cur.move(14,18));
+        assertEquals("500606060006000000600060400440740-1", cur.getGameState());
+    }
+
+    @Test
+    public void testWhiteKingReachesStart() {
+        Game cur = new Game("000600060006000000670050460440040-1");
+        assertTrue(cur.move(22,29));
+        assertEquals("000600060006000000670000400445041-1", cur.getGameState());
+    }
+
+    @Test
+    public void testBlackKingReachesStart() {
+        Game cur = new Game("000600760006040000600000000445041-1");
+        assertTrue(cur.move(6, 1));
+        assertEquals("070600060006040000600000000445040-1", cur.getGameState());
+    }
 
     @Test
     public void testGetBoard() {
@@ -92,6 +148,143 @@ public class GameTest {
         game.move(start,end);
         Board d = game.getBoard();
         assertNotEquals(c.toString(), d.toString());
+    }
+
+
+    @Test
+    public void testIsGameOverInitialBoard() {
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void testIsGameOverNoBlack() {
+        game.setGameState("000000000000000000004444444444441-1");
+        assertTrue(game.isGameOver());
+    }
+
+    @Test
+    public void testIsGameOverNoWhite() {
+        game.setGameState("666666666666000000000000000000001-1");
+        assertTrue(game.isGameOver());
+    }
+
+    @Test
+    public void testIsGameOverNoMovesBlack() {
+        game.setGameState("000060004000440000000000000000001-1");
+        assertTrue(game.isGameOver());
+    }
+
+    @Test
+    public void testIsGameOverNoMovesWhite() {
+        game.setGameState("666640000000000000000000000000000-1");
+        assertTrue(game.isGameOver());
+    }
+
+    @Test
+    public void testIsGameOverRandomBoard() {
+        game.setGameState("006060060460400040000000000446041-1");
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void testisP1TurnInitialTrue() {
+        assertTrue(game.isP1Turn());
+    }
+
+    @Test
+    public void testIsP1TurnInitialFalse() {
+        game.setGameState("666666666666000000004444444444440-1");
+        assertFalse(game.isP1Turn());
+    }
+
+    @Test
+    public void testSetP1TurnTrue() {
+        game.setP1Turn(true);
+        assertTrue(game.isP1Turn());
+    }
+
+    @Test
+    public void testSetP1TurnFalse() {
+        game.setP1Turn(false);
+        assertFalse(game.isP1Turn());
+    }
+
+    @Test
+    public void testGetSkipIndexInitial() {
+        assertEquals(-1, game.getSkipIndex());
+    }
+
+    @Test
+    public void testGetSkipIndexNonInitial() {
+        game.setGameState("6666666666660000000044444444444419");
+        assertEquals(9, game.getSkipIndex());
+    }
+
+    @Test
+    public void testGetGameStateInitial() {
+        assertEquals(initialState, game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateNull() {
+        assertDoesNotThrow(() -> game.setGameState(null));
+    }
+
+    @Test
+    public void testSetGameStateEmptyString() {
+        assertDoesNotThrow(() -> game.setGameState(""));
+    }
+
+    //blackbox then change it to throws the number format
+    //whitebox then the board is OG
+    @Test
+    public void testSetGameStateStringWithNonNumbers() {
+        String board = "hello";
+        game.setGameState(board);
+        assertEquals(initialState,game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateStringP1Is1() {
+        String board = "666666666666000000004444444444441-1";
+        game.setGameState(board);
+        assertEquals(board,game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateStringP1Is0() {
+        String board = "666666666666000000004444444444440-1";
+        game.setGameState(board);
+        assertEquals(board,game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateStringP1IsAlpha() {
+        String board = "66666666666600000000444444444444a-1";
+        game.setGameState(board);
+        assertEquals("666666666666000000004444444444440-1",game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateStringSkipAlpha() {
+        String board = "666666666666000000004444444444441a";
+        game.setGameState(board);
+        assertEquals(initialState, game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateStringNormalSkip() {
+        String board = "666666666666000000004444444444441100";
+        game.setGameState(board);
+        assertEquals(board, game.getGameState());
+    }
+
+    @Test
+    public void testSetGameStateStringSkipSomeAlpha() {
+        String board = "6666666666660000000044444444444411a1";
+        game.setGameState(board);
+        assertEquals(initialState, game.getGameState());
+
     }
 
 }
