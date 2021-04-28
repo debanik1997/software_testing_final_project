@@ -2,6 +2,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import Checkers.network.Command;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 public class CommandTest {
 
