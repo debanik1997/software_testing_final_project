@@ -26,4 +26,22 @@ public class PlayerTest {
         HumanPlayer hp = new HumanPlayer();
         assertTrue(hp.isHuman());
     }
+
+    @Test
+    void testNetworkPlayerToString() {
+        NetworkPlayer np = new NetworkPlayer();
+        assertEquals("NetworkPlayer[isHuman=false]", np.toString());
+    }
+
+    @Test
+    void testComputerPlayerToString() {
+        ComputerPlayer cp = new ComputerPlayer();
+        assertEquals("ComputerPlayer[isHuman=false]", cp.toString());
+    }
+
+    @Test
+    void testHumanPlayerToString() {
+        HumanPlayer hp = new HumanPlayer();
+        assertEquals("HumanPlayer[isHuman=true]", hp.toString());
+    }
 }
