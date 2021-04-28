@@ -229,4 +229,8 @@ public class BoardTest {
         assertEquals(-1, Board.toIndex(null));
     }
 
+    @Test
+    void testToString() {
+        assertEquals("Checkers.model.Board[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]", board.toString());
+    }
 }
