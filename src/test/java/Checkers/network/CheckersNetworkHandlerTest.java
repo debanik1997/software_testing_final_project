@@ -9,33 +9,74 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 import static org.mockito.Mockito.*;
 
 public class CheckersNetworkHandlerTest {
 
-    @Test
-    public void testMock() {
-        ConnectionHandler ch = mock(ConnectionHandler.class);
-        CheckersWindow window = mock(CheckersWindow.class);
-        CheckerBoard board = mock(CheckerBoard.class);
-        OptionPanel panel = mock(OptionPanel.class);
-        CheckersNetworkHandler handler = new CheckersNetworkHandler(true, window, board, panel);
-        Socket s = mock(Socket.class);
-        when(ch.getSocket()).thenReturn(s);
-        when(s.isClosed()).thenReturn(true);
+    private ConnectionHandler chMock;
+    private CheckersWindow checkersWindowMock;
+    private CheckerBoard checkerBoardMock;
+    private OptionPanel optionPanelMock;
+    private CheckersNetworkHandler checkersNetworkHandler;
+    private Socket socketMock;
+    private OutputStream outputMock;
 
-        CheckersNetworkHandler.sendResponse(ch, "response");
-        InOrder inOrder = inOrder(s);
-        inOrder.verify(s, times(1)).isClosed();
-        verifyNoInteractions(s, ch);
-
-
+    @BeforeEach
+    void setup() {
+        chMock = mock(ConnectionHandler.class);
+        checkersWindowMock = mock(CheckersWindow.class);
+        checkerBoardMock = mock(CheckerBoard.class);
+        optionPanelMock = mock(OptionPanel.class);
+        checkersNetworkHandler = new CheckersNetworkHandler(true, checkersWindowMock, checkerBoardMock, optionPanelMock);
+        socketMock = mock(Socket.class);
+        outputMock = mock(OutputStream.class);
     }
 
+    @Test
+    public void testConnectionHandlerMocksSendResponseBehaviorSocketIsClosedAndGetSocketWhenSocketIsClosed() {
+        when(chMock.getSocket()).thenReturn(socketMock);
+        when(socketMock.isClosed()).thenReturn(true);
+
+        CheckersNetworkHandler.sendResponse(chMock, "response");
+        InOrder inOrder = inOrder(socketMock, chMock);
+        inOrder.verify(chMock, times(1)).getSocket();
+        inOrder.verify(socketMock, times(1)).isClosed();
+    }
+
+    @Test
+    public void testConnectionHandlerMocksSendResponseBehaviorSocketIsClosedAndGetSocketWhenSocketIsNotClosed() throws IOException {
+        when(chMock.getSocket()).thenReturn(socketMock);
+        when(socketMock.isClosed()).thenReturn(false);
+        when(socketMock.getOutputStream()).thenReturn(outputMock);
+
+        CheckersNetworkHandler.sendResponse(chMock, "response");
+        InOrder inOrder = inOrder(socketMock, chMock, outputMock);
+        inOrder.verify(chMock, times(1)).getSocket();
+        inOrder.verify(socketMock, times(1)).isClosed();
+        inOrder.verify(socketMock, times(1)).getOutputStream();
+        inOrder.verify(outputMock, times(1)).write(any());
+        inOrder.verify(outputMock, times(1)).flush();
+        inOrder.verify(socketMock, times(1)).close();
+    }
+
+    @Test
+    public void testConnectionHandlerMocksSendResponseBehaviorIOException() throws IOException {
+        doThrow(IOException.class).when(outputMock).write(any());
+        when(chMock.getSocket()).thenReturn(socketMock);
+        when(socketMock.isClosed()).thenReturn(false);
+        when(socketMock.getOutputStream()).thenReturn(outputMock);
+
+        CheckersNetworkHandler.sendResponse(chMock, "response");
+
+        verify(outputMock, never()).flush();
+    }
 
 }
