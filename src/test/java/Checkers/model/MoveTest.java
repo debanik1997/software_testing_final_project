@@ -13,7 +13,7 @@ from that we also passed in the happy path values. This was mainly unit testing
 and since there were no branches and only statements it was trivial to achieve coverage.
 However we did try error guessing/equivalence partioning to pass in some inputs that could brea
 the setter or getter. However, since there were other functions called these did not cause
-any irregular behavior since the helpers managed them. 
+any irregular behavior since the helpers managed them.
  */
 public class MoveTest {
 
