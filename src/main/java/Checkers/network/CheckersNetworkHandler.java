@@ -39,6 +39,8 @@ public class CheckersNetworkHandler implements ActionListener {
 	/** The start of a response that was denied. */
 	public static final String RESPONSE_DENIED = "DENIED";
 
+	public String myCmd = "";
+
 	/** The flag indicating if this handler is handling a connection to player
 	 * 1 or not. */
 	private boolean isPlayer1;
@@ -169,7 +171,7 @@ public class CheckersNetworkHandler implements ActionListener {
 	 * @param newState
 	 * @return
 	 */
-	private String handleUpdate(String newState) {
+	public String handleUpdate(String newState) {
 		
 		// New state is invalid 
 		if (newState.isEmpty()) {

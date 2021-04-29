@@ -1,5 +1,6 @@
 import Checkers.network.CheckersNetworkHandler;
 import Checkers.network.ConnectionHandler;
+import Checkers.network.ConnectionListener;
 import Checkers.network.Session;
 import Checkers.ui.CheckerBoard;
 import Checkers.ui.CheckersWindow;
@@ -10,7 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.MockedStatic;
 
+import java.awt.event.ActionEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -43,6 +46,103 @@ public class CheckersNetworkHandlerTest {
         outputMock = mock(OutputStream.class);
     }
 
+    @Test
+    public void testActionPerformedReadUpdateCommand() {
+        ActionEvent aeMock = mock(ActionEvent.class);
+        when(aeMock.getSource()).thenReturn(chMock);
+        when(chMock.getSocket()).thenReturn(socketMock);
+
+        try (MockedStatic<ConnectionListener> clMock = mockStatic(ConnectionListener.class)) {
+            clMock.when(() -> ConnectionListener.read(socketMock)).thenReturn("UPDATE");
+            Session session1 = mock(Session.class);
+            Session session2 = mock(Session.class);
+            when(checkersWindowMock.getSession1()).thenReturn(session1);
+            when(checkersWindowMock.getSession2()).thenReturn(session2);
+            CheckersNetworkHandler cnhSpy = spy(checkersNetworkHandler);
+
+            try {
+                cnhSpy.actionPerformed(aeMock);
+            } catch (Exception e) {
+
+            }
+            verify(cnhSpy).handleUpdate("");
+        }
+    }
+
+    @Test
+    public void testActionPerformedReadConnectCommand() {
+        ActionEvent aeMock = mock(ActionEvent.class);
+        when(aeMock.getSource()).thenReturn(chMock);
+        when(chMock.getSocket()).thenReturn(socketMock);
+
+        try (MockedStatic<ConnectionListener> clMock = mockStatic(ConnectionListener.class)) {
+            clMock.when(() -> ConnectionListener.read(socketMock)).thenReturn("CONNECT");
+            Session session1 = mock(Session.class);
+            Session session2 = mock(Session.class);
+            when(checkersWindowMock.getSession1()).thenReturn(session1);
+            when(checkersWindowMock.getSession2()).thenReturn(session2);
+            CheckersNetworkHandler cnhSpy = spy(checkersNetworkHandler);
+
+            try {
+                cnhSpy.actionPerformed(aeMock);
+            } catch (Exception e) {
+
+            }
+            verify(cnhSpy).handleConnect(socketMock, -1, false);
+        }
+    }
+
+    @Test
+    public void testActionPerformedReadGetStateCommand() {
+        ActionEvent aeMock = mock(ActionEvent.class);
+        when(aeMock.getSource()).thenReturn(chMock);
+        when(chMock.getSocket()).thenReturn(socketMock);
+
+        try (MockedStatic<ConnectionListener> clMock = mockStatic(ConnectionListener.class)) {
+            clMock.when(() -> ConnectionListener.read(socketMock)).thenReturn("GET-STATE");
+            Session session1 = mock(Session.class);
+            Session session2 = mock(Session.class);
+            when(session1.getSid()).thenReturn("");
+            when(session2.getSid()).thenReturn("");
+            when(checkersWindowMock.getSession1()).thenReturn(session1);
+            when(checkersWindowMock.getSession2()).thenReturn(session2);
+
+            try {
+                checkersNetworkHandler.actionPerformed(aeMock);
+            } catch (Exception e) {
+
+            }
+            InOrder inorder = inOrder(checkerBoardMock);
+            inorder.verify(checkerBoardMock, times(1)).getGame();
+        }
+    }
+
+    @Test
+    public void testActionPerformedReadDisconnectCommand() {
+        ActionEvent aeMock = mock(ActionEvent.class);
+        when(aeMock.getSource()).thenReturn(chMock);
+        when(chMock.getSocket()).thenReturn(socketMock);
+
+        try (MockedStatic<ConnectionListener> clMock = mockStatic(ConnectionListener.class)) {
+            clMock.when(() -> ConnectionListener.read(socketMock)).thenReturn("DISCONNECT");
+            Session session1 = mock(Session.class);
+            Session session2 = mock(Session.class);
+            when(checkersWindowMock.getSession1()).thenReturn(session1);
+            when(checkersWindowMock.getSession2()).thenReturn(session2);
+            when(session1.getSid()).thenReturn("");
+            when(session2.getSid()).thenReturn("");
+            NetworkWindow nwMock = mock(NetworkWindow.class);
+            when(optionPanelMock.getNetworkWindow1()).thenReturn(nwMock);
+
+            try {
+                checkersNetworkHandler.actionPerformed(aeMock);
+            } catch (Exception e) {
+
+            }
+            InOrder inorder = inOrder(nwMock);
+            inorder.verify(nwMock, times(1)).setCanUpdateConnect(true);
+        }
+    }
 
     @Test
     public void testHandleConnectDeniedUserAlreadyConnected() {
@@ -156,5 +256,4 @@ public class CheckersNetworkHandlerTest {
 
         verify(outputMock, never()).flush();
     }
-
 }
