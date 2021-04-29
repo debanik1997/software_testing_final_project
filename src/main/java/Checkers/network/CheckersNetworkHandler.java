@@ -206,7 +206,7 @@ public class CheckersNetworkHandler implements ActionListener {
 	 * @param remotePlayer1	the flag indicating if the remote player is player 1.
 	 * @return the resulting response to send to the remote client.
 	 */
-	private String handleConnect(Socket s, int port, boolean remotePlayer1) {
+	public String handleConnect(Socket s, int port, boolean remotePlayer1) {
 
 		// Check if there is someone already connected
 		Session s1 = window.getSession1(), s2 = window.getSession2();
