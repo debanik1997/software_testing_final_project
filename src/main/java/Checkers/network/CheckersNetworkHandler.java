@@ -256,7 +256,7 @@ public class CheckersNetworkHandler implements ActionListener {
 	 * @param handler	the connection handler to send the response to.
 	 * @param response	the response data to send.
 	 */
-	private static void sendResponse(ConnectionHandler handler,
+	public static void sendResponse(ConnectionHandler handler,
 			String response) {
 
 		// Trivial cases
