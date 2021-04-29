@@ -7,6 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+/*
+Initially to test this program we started with approaching it as a blackbox testing challenge. Since we rougly knew
+how the game of checkers worked as well were provided with adequate documentation this was a suitable task to take on.
+Aditionally, since the game was calling many other functions and was tightly coupled to the board as well as individual
+pieces, we treated it overall as an integration blackbox test where we applied various techniques like equivalence
+partioning, boundary analysis, and error guessing. Aditionally, due to the tight coupling and the presence of many
+void functions, we had to test many functions with the assumption the getGameState was working correctly.
+
+After implmenenting all the tests we found that there were no faults.
+ */
 
 public class GameTest {
 
@@ -18,8 +28,26 @@ public class GameTest {
         game = new Game();
     }
 
-    //test constructors
+    /*
+    First we attempted to test the constructors. Since we were using
+    the other construcotrs, we started with the alternate constructor. A board was passed in
+    as both null and not null for equivalence partioining.
+     */
+    @Test
+    public void testGameAlternateConstructor() {
+        Game cur = new Game(game.getBoard(), true, -1);
+        assertEquals(initialState, cur.getGameState());
+    }
 
+    @Test
+    public void testGameAltConstructorBoardNull() {
+        Game cur = new Game(null, true, -1);
+        assertEquals(initialState, cur.getGameState());
+    }
+
+    //Testing the copy function. Since this does not take in any inputs we had to be creative how to
+    //test this properly. The two partitions were either a copy of the game in the beginning (to ensure no error happens)
+    //and a copy midway through the game.
     @Test
     public void testCopyInitial() {
         Game c = game.copy();
@@ -34,18 +62,9 @@ public class GameTest {
         assertEquals(temp, c.getGameState());
     }
 
-    @Test
-    public void testGameAlternateConstructor() {
-        Game cur = new Game(game.getBoard(), true, -1);
-        assertEquals(initialState, cur.getGameState());
-    }
-
-    @Test
-    public void testGameAltConstructorBoardNull() {
-        Game cur = new Game(null, true, -1);
-        assertEquals(initialState, cur.getGameState());
-    }
-
+    //Testing the restart function. Since this does not take in any inputs we had to be creative how to
+    //test this properly. The two partitions were either a restart of the game in the beginning (to ensure no error happens)
+    //and a restart midway through the game.
     @Test
     public void testRestartInProg() {
         String temp = "666666666666000000004444444444441-1";
@@ -60,6 +79,22 @@ public class GameTest {
         assertEquals(initialState, game.getGameState());
     }
 
+    /*
+    Move was one of the more complicated functions to test. First we tested
+    the move function that took in a Point. In order to do partioining we tested
+    with both a null start/end and a non-null.
+
+    From there move was tested. The difficulty in move was that we had to correclty simulate a board game
+    to test it with the blackbox testing. There were a couple situations that we thought of.
+    1) Valid move
+    2) Invalid move
+    3) Move that creates a King for either white or black
+    4) Invalid indices
+
+    These were the four cases that were initially done. Then when we ran jacococ to check coverage we came back
+    to add tests that related to verifying the actual state of the board as well as looking at the case where the skipIndex
+    was not -1. This increased coverage.
+     */
     @Test
     public void testMovePointStartNull() {
         Point p = new Point(1,0);
@@ -140,6 +175,8 @@ public class GameTest {
         assertEquals("070600060006040000600000000445040-1", cur.getGameState());
     }
 
+    //This was a simple test that we verified returned the board. Since specifications said the board was a copy
+    //we wanted to ensure a change to the original board was not reflected in the returned object
     @Test
     public void testGetBoard() {
         Board c = game.getBoard();
@@ -151,6 +188,13 @@ public class GameTest {
     }
 
 
+    /*
+    For testing game over there were a couple scenarios that were discovered in blackbox testing.
+    We wanted to test
+    1) GameNotOver
+    2) Game over becaause no more black/white pieces
+    3) game over because no valid moves
+     */
     @Test
     public void testIsGameOverInitialBoard() {
         assertFalse(game.isGameOver());
@@ -186,6 +230,10 @@ public class GameTest {
         assertFalse(game.isGameOver());
     }
 
+    /*
+    The following tests related to the three methods that were simple getters and setters
+    These were trivial to test
+     */
     @Test
     public void testisP1TurnInitialTrue() {
         assertTrue(game.isP1Turn());
@@ -220,11 +268,24 @@ public class GameTest {
         assertEquals(9, game.getSkipIndex());
     }
 
+    /*
+    Due to blackbox testing it was hard to tell what eactly was happening here. We just wanted to make sure
+    that the string that was returned was similar to the form stated elsewhere. Because of this we just had a test to look
+    at the state.
+     */
     @Test
     public void testGetGameStateInitial() {
         assertEquals(initialState, game.getGameState());
     }
 
+    /*
+    In order to test this funciton we had to rely on the getGameState to ensure changes were happenign properly. Without
+    looking at the code we wanted to pass in a state that was empty, null, and in progress. These were
+    the initial cases we looked at.
+
+    After lookin gat jacoco we passed in a game state with non numerical characters, and altered
+    the conditions around the p1 and skip values.
+     */
     @Test
     public void testSetGameStateNull() {
         assertDoesNotThrow(() -> game.setGameState(null));
