@@ -14,7 +14,7 @@ public class GameTest {
     private final String initialState = "666666666666000000004444444444441-1";
 
     @BeforeEach
-    void initalizeGame() {
+    void initializeGame() {
         game = new Game();
     }
 
