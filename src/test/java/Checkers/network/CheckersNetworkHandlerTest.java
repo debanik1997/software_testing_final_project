@@ -22,7 +22,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/*
+Mock testing
+ */
 import static org.mockito.Mockito.*;
 
 public class CheckersNetworkHandlerTest {
@@ -46,6 +48,10 @@ public class CheckersNetworkHandlerTest {
         outputMock = mock(OutputStream.class);
     }
 
+    /*
+    The following four tests test all the different commands. We had to utilize a static mock for the ConnectionListener.read
+    function. Also, most of them required a method call in the same CheckersNetworkHandler so we utlilized a spy.
+     */
     @Test
     public void testActionPerformedReadUpdateCommand() {
         ActionEvent aeMock = mock(ActionEvent.class);
@@ -144,6 +150,11 @@ public class CheckersNetworkHandlerTest {
         }
     }
 
+    /*
+    The following tests test handleConnect. This takes in a Socket which we mocked out. Tried to hit statement coveraage
+    with the mocks. Had the case where someone was connected, invalid connection, host and source were the same, and a
+    successful connection.
+     */
     @Test
     public void testHandleConnectDeniedUserAlreadyConnected() {
         Session session1 = mock(Session.class);
@@ -218,6 +229,10 @@ public class CheckersNetworkHandlerTest {
         assertTrue(s.contains(CheckersNetworkHandler.RESPONSE_ACCEPTED));
     }
 
+    /*
+    The following tests mock out sendResponse which takes a ConnectionHandler which we mocked.
+    Tested the case with the socket being closed, an IOException gets thrown, and the happy path.
+     */
     @Test
     public void testConnectionHandlerMocksSendResponseBehaviorSocketIsClosedAndGetSocketWhenSocketIsClosed() {
         when(chMock.getSocket()).thenReturn(socketMock);

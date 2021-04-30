@@ -6,6 +6,15 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
+Overall, this file was easy to test. The file was all setters and getters.
+Because of that we tried to pass in null/negative values where possible. Aside
+from that we also passed in the happy path values. This was mainly unit testing
+and since there were no branches and only statements it was trivial to achieve coverage.
+However we did try error guessing/equivalence partioning to pass in some inputs that could brea
+the setter or getter. However, since there were other functions called these did not cause
+any irregular behavior since the helpers managed them.
+ */
 public class MoveTest {
 
     private Move move;
