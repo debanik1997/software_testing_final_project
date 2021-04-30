@@ -33,8 +33,9 @@ network-based gameplay.
 - [Gradle:](https://gradle.org/) build tool of our choice
 
 ## How to run
-To run our tests, simply open the root folder with IntelliJ, wait some time for all the Gradle configuration to be complete, 
-then you click on the green "run" icon next to each test class when you open the file.
+To run our tests, simply open the root folder with IntelliJ and wait some time for all the Gradle configuration to be complete. 
+After that, you can run individual test classes by clicking on the green "run" icon next to each test class when you open the file, 
+or you can run all tests at once by right clicking on the `test` folder and selecting the "run" option.
 
 ## Presentation slides
 Our presentation slides can be found at [SoftwareTestingFinalPresentation.pdf](./SoftwareTestingFinalPresentation.pdf)
